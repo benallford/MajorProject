@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff000000"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/select_intro"
+        android:textStyle="bold" />
+
+    <Gallery
+        android:id="@+id/gallery"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/show_intro"
+        android:textStyle="italic" />
+
+    <ImageView
+        android:id="@+id/picture"
+        android:layout_width="match_parent"
+        android:layout_height="236dp"
+        android:contentDescription="@string/picture" />
+    
+    <HorizontalScrollView
+        android:id="@+id/hsv1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/Filter5"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Filter 1" />
+
+            <Button
+                android:id="@+id/Filter6"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Filter 2" />
+
+            <Button
+                android:id="@+id/Filter7"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Filter 3" />
+
+            <Button
+                android:id="@+id/Filter8"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Filter 4" />
+        </LinearLayout>
+    </HorizontalScrollView>
+<Button
+        android:id="@+id/save_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Image" />
+</LinearLayout>
