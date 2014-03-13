@@ -3,36 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ff000000"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity" >
+    android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/button1"
+    <Gallery
+        android:id="@+id/gallery1"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:text="@string/Camera_button" />
-
-    <Button
-        android:id="@+id/img_lib_button"
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:text="Image Library" />
-
-    <Button
-        android:id="@+id/crystal_img"
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:text="Crystal Images" />
+        android:layout_height="wrap_content" />
 
     <ImageView
-        android:id="@+id/picture"
-        android:layout_width="match_parent"
-        android:layout_height="230dp"
-        android:src="@drawable/ic_launcher" />
+        android:id="@+id/crystal_img_imgV"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="75dp" />
 
     <HorizontalScrollView
         android:id="@+id/hsv1"
@@ -47,28 +30,28 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/Filter1"
+                android:id="@+id/Filter9"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 1" />
 
             <Button
-                android:id="@+id/Filter2"
+                android:id="@+id/Filter10"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 2" />
 
             <Button
-                android:id="@+id/Filter3"
+                android:id="@+id/Filter11"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 3" />
 
             <Button
-                android:id="@+id/Filter4"
+                android:id="@+id/Filter12"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
@@ -77,7 +60,7 @@
     </HorizontalScrollView>
 
     <Button
-        android:id="@+id/save_img"
+        android:id="@+id/save_crytal_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save Image" />

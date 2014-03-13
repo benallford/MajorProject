@@ -19,10 +19,10 @@ public class Menu extends Activity {
 
 	Button camera, but2, undo;
 	static ImageView iv;
-	Button bright_filter, dark_filter, neon_filter, img_lib_but;
+	Button bright_filter, dark_filter, neon_filter, img_lib_but, crystal_lib;
 	MediaPlayer buttonSound;
 	Bitmap bmp, operation, img_cam;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -40,15 +40,9 @@ public class Menu extends Activity {
 																	// button
 																	// clicks
 
-		camera = (Button) findViewById(R.id.button1);
-		iv = (ImageView) findViewById(R.id.picture);
-		//undo = (Button) findViewById(R.id.undo);
-		bright_filter = (Button) findViewById(R.id.Filter1);
-		dark_filter = (Button) findViewById(R.id.Filter2);
-		neon_filter = (Button) findViewById(R.id.Filter3);
-	
 		
-		img_lib_but = (Button) findViewById(R.id.img_lib_button);
+		initalise(); //get buttons etc
+		
 		img_lib_but.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -125,14 +119,15 @@ public class Menu extends Activity {
 
 		});
 		
-		neon_filter.setOnClickListener(new OnClickListener(){
+		
+
+		crystal_lib.setOnClickListener(new OnClickListener(){
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View arg0) {
 				buttonSound.start();
-				BitmapDrawable abmp = (BitmapDrawable) iv.getDrawable();
-				bmp = abmp.getBitmap();
-				
+				Intent crystalLib = new Intent("com.bea10.majorproject.crystal_images");
+				startActivity(crystalLib);
 				
 			}
 			
@@ -141,13 +136,26 @@ public class Menu extends Activity {
 			
 			
 		});
-
-	
 	
 	
 	
 	
 
+	}
+	
+	private void initalise(){
+		
+		camera = (Button) findViewById(R.id.button1);
+		iv = (ImageView) findViewById(R.id.picture);
+		//undo = (Button) findViewById(R.id.undo);
+		bright_filter = (Button) findViewById(R.id.Filter1);
+		dark_filter = (Button) findViewById(R.id.Filter2);
+		neon_filter = (Button) findViewById(R.id.Filter3);
+		
+		crystal_lib = (Button) findViewById(R.id.crystal_img);
+	
+		
+		img_lib_but = (Button) findViewById(R.id.img_lib_button);
 	}
 
 	/*
