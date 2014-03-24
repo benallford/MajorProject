@@ -1,35 +1,49 @@
 package com.bea10.majorproject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Random;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.GestureDetector.OnDoubleTapListener;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-public class Menu extends Activity {
+public class Menu extends Activity{
 
 	Button camera, but2, undo;
 	static ImageView iv;
-	Button bright_filter, dark_filter, neon_filter, img_lib_but, crystal_lib;
+	Button bright_filter, dark_filter, neon_filter, img_lib_but, crystal_lib,
+			save_img;
 	MediaPlayer buttonSound;
 	Bitmap bmp, operation, img_cam;
-	
+	String imageNameForSDCard;
+	int time = (int) System.currentTimeMillis();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		buttonSound = MediaPlayer.create(this, R.raw.button_click); // creating
+		buttonSound = MediaPlayer.create(this, R.raw.button_click);// creating
 																	// an object
 																	// from the
 																	// MediaPlayer
@@ -40,28 +54,23 @@ public class Menu extends Activity {
 																	// button
 																	// clicks
 
+		initalise(); // get buttons etc
+		save_img.setEnabled(false);
 		
-		initalise(); //get buttons etc
 		
-		img_lib_but.setOnClickListener(new OnClickListener(){
+
+		img_lib_but.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				
+
 				buttonSound.start();
 				Intent img_lib = new Intent("com.bea10.majorproject.Image_lib");
 				startActivity(img_lib);
-				
+
 			}
-			
-			
-			
-			
-			
+
 		});
-
-
-		
 
 		camera.setOnClickListener(new OnClickListener() {
 
@@ -78,12 +87,11 @@ public class Menu extends Activity {
 				Intent intent = new Intent(
 						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 				startActivityForResult(intent, 0);
+				save_img.setEnabled(true);
 
 			}
 
 		});
-
-		
 
 		dark_filter.setOnClickListener(new OnClickListener() {
 
@@ -118,44 +126,51 @@ public class Menu extends Activity {
 			}
 
 		});
-		
-		
 
-		crystal_lib.setOnClickListener(new OnClickListener(){
+		crystal_lib.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				buttonSound.start();
-				Intent crystalLib = new Intent("com.bea10.majorproject.crystal_images");
+				Intent crystalLib = new Intent(
+						"com.bea10.majorproject.crystal_images");
 				startActivity(crystalLib);
-				
+
 			}
-			
-			
-			
-			
-			
+
 		});
-	
-	
+
+		save_img.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				checkSDCard();
+				save_img.setEnabled(false);
+
+			}
+		});
+		
+		
+	}
 	
 	
 
-	}
-	
-	private void initalise(){
-		
+	private void initalise() {
+
 		camera = (Button) findViewById(R.id.button1);
 		iv = (ImageView) findViewById(R.id.picture);
-		//undo = (Button) findViewById(R.id.undo);
+		// undo = (Button) findViewById(R.id.undo);
 		bright_filter = (Button) findViewById(R.id.Filter1);
 		dark_filter = (Button) findViewById(R.id.Filter2);
 		neon_filter = (Button) findViewById(R.id.Filter3);
-		
+
 		crystal_lib = (Button) findViewById(R.id.crystal_img);
-	
-		
+
 		img_lib_but = (Button) findViewById(R.id.img_lib_button);
+
+		save_img = (Button) findViewById(R.id.save_img);
+		
+
 	}
 
 	/*
@@ -173,6 +188,7 @@ public class Menu extends Activity {
 
 			img_cam = (Bitmap) data.getExtras().get("data");
 			iv.setImageBitmap(img_cam);
+			Toast.makeText(getApplicationContext(), "Choose a filter to add cool effects!", Toast.LENGTH_LONG).show();
 		}
 
 	}
@@ -232,8 +248,49 @@ public class Menu extends Activity {
 		iv.setImageBitmap(operation);
 	}
 
-	
-	
+	public void checkSDCard() {
+
+		iv = (ImageView) findViewById(R.id.picture);
+		BitmapDrawable drawable = (BitmapDrawable) iv.getDrawable(); //convert imageview to bitmap so we can save it to external storage
+		Bitmap bitmap = drawable.getBitmap();
+		File sdCardDirectory = Environment.getExternalStorageDirectory();
+		File image = new File(sdCardDirectory, time + ".png");
+
+		boolean success = false;
+
+		String state = Environment.getExternalStorageState(); //check whether SD card is available
+
+		if (Environment.MEDIA_MOUNTED.equals(state)) { //if so then write to it
+			FileOutputStream outStream;
+			try {
+
+				outStream = new FileOutputStream(image);
+				bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+				/* 100 to keep full quality of the image */
+
+				outStream.flush();
+				outStream.close();
+				success = true;
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (success) {
+				Toast.makeText(getApplicationContext(),
+						"Image saved with success", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"Error during image saving", Toast.LENGTH_SHORT).show();
+			}
+		} else {
+			Toast.makeText(getApplicationContext(), "SD card is not available",
+					Toast.LENGTH_SHORT).show();
+		}
+		
+		Toast.makeText(getApplicationContext(), "Click camera to take another photo!", Toast.LENGTH_SHORT).show();
+
+	}
 
 	@Override
 	protected void onPause() {

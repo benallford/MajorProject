@@ -35,7 +35,8 @@ public final class R {
         public static final int image7=0x7f02000b;
         public static final int image8=0x7f02000c;
         public static final int image9=0x7f02000d;
-        public static final int splash_screen=0x7f02000e;
+        public static final int press_cam=0x7f02000e;
+        public static final int splash_screen=0x7f02000f;
     }
     public static final class id {
         public static final int Filter1=0x7f090005;
