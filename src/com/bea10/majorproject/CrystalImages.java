@@ -1,5 +1,9 @@
 package com.bea10.majorproject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import android.app.Activity;
@@ -9,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -16,6 +21,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class CrystalImages extends Activity {
 
@@ -27,13 +33,16 @@ public class CrystalImages extends Activity {
 
 	Bitmap bi;
 	InputStream is;
-	Button bf, bf2;
+	ImageView iv1;
+	Button bf, bf2, save_img1;
+	int time = (int) System.currentTimeMillis();
 	private Bitmap operation;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.crystal_images);
+
 
 		// BitmapDrawable abmp = (BitmapDrawable)selectedImage.getDrawable();
 		// bi = abmp.getBitmap();
@@ -89,8 +98,24 @@ public class CrystalImages extends Activity {
 
 	
 		});
+	
+		save_img1 = (Button) findViewById(R.id.save_crystal_img);
+		
+		save_img1.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+
+				checkSDCard();
+
+			}
+
+	
+		});
 		
 	}
+	
+	
 	
 	
 
@@ -139,5 +164,62 @@ public class CrystalImages extends Activity {
 		}
 
 		selectedImage.setImageBitmap(operation);
+	}
+	
+	public void checkSDCard() {
+
+		iv1 = (ImageView) findViewById(R.id.crystal_img_imgV);
+		BitmapDrawable drawable = (BitmapDrawable) iv1.getDrawable(); // convert
+																		// imageview
+																		// to
+																		// bitmap
+																		// so we
+																		// can
+																		// save
+																		// it to
+																		// external
+																		// storage
+		Bitmap bitmap = drawable.getBitmap();
+		File sdCardDirectory = Environment.getExternalStorageDirectory();
+		File image = new File(sdCardDirectory, time + ".png");
+
+		boolean success = false;
+
+		String state = Environment.getExternalStorageState(); // check whether
+																// SD card is
+																// available
+
+		if (Environment.MEDIA_MOUNTED.equals(state)) { // if so then write to it
+			FileOutputStream outStream;
+			try {
+
+				outStream = new FileOutputStream(image);
+				bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+				/* 100 to keep full quality of the image */
+
+				outStream.flush();
+				outStream.close();
+				success = true;
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (success) {
+				Toast.makeText(getApplicationContext(),
+						"Image saved with success", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"Error during image saving", Toast.LENGTH_SHORT).show();
+			}
+		} else {
+			Toast.makeText(getApplicationContext(), "SD card is not available",
+					Toast.LENGTH_SHORT).show();
+		}
+
+		Toast.makeText(getApplicationContext(),
+				"Try adding an effect to another image!", Toast.LENGTH_SHORT)
+				.show();
+
 	}
 }

@@ -11,7 +11,7 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/Camera"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:text="@string/Camera_button" />
@@ -73,6 +73,13 @@
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 4" />
+            <Button
+                android:id="@+id/Filter5"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Filter 5" />
+            
         </LinearLayout>
     </HorizontalScrollView>
 
