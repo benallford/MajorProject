@@ -10,10 +10,22 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BlurMaskFilter;
+import android.graphics.BlurMaskFilter.Blur;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,7 +49,8 @@ public class Menu extends Activity {
 	Button camera, but2, undo;
 	static ImageView iv;
 	Button bright_filter, dark_filter, neon_filter, img_lib_but, crystal_lib,
-			save_img, highlight, gray_scale, hue_filter;
+			save_img, gray_scale, reflection, round_corner;
+
 	MediaPlayer buttonSound;
 	Bitmap bmp, operation, img_cam;
 	String imageNameForSDCard;
@@ -71,6 +84,13 @@ public class Menu extends Activity {
 
 		initalise(); // get buttons etc
 		save_img.setEnabled(false);
+		undo.setEnabled(false);
+		bright_filter.setEnabled(false);
+		dark_filter.setEnabled(false);
+		neon_filter.setEnabled(false);
+		gray_scale.setEnabled(false);
+		reflection.setEnabled(false);
+		round_corner.setEnabled(false);
 
 		img_lib_but.setOnClickListener(new OnClickListener() {
 
@@ -101,6 +121,12 @@ public class Menu extends Activity {
 						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 				startActivityForResult(intent, 0);
 				save_img.setEnabled(true);
+				bright_filter.setEnabled(true);
+				dark_filter.setEnabled(true);
+				neon_filter.setEnabled(true);
+				gray_scale.setEnabled(true);
+				reflection.setEnabled(true);
+				round_corner.setEnabled(true);
 
 			}
 
@@ -113,8 +139,9 @@ public class Menu extends Activity {
 				buttonSound.start();
 				BitmapDrawable drawable3 = (BitmapDrawable) iv.getDrawable();
 				Bitmap bitmap3 = drawable3.getBitmap();
-				Bitmap ok3 = doBrightness(bitmap3,-60);
+				Bitmap ok3 = doBrightness(bitmap3, -60);
 				iv.setImageBitmap(ok3);
+				undo.setEnabled(true);
 
 			}
 
@@ -134,8 +161,9 @@ public class Menu extends Activity {
 				buttonSound.start();
 				BitmapDrawable drawable3 = (BitmapDrawable) iv.getDrawable();
 				Bitmap bitmap3 = drawable3.getBitmap();
-				Bitmap ok3 = doBrightness(bitmap3,50);
+				Bitmap ok3 = doBrightness(bitmap3, 50);
 				iv.setImageBitmap(ok3);
+				undo.setEnabled(true);
 
 			}
 
@@ -161,51 +189,85 @@ public class Menu extends Activity {
 				buttonSound.start();
 				checkSDCard();
 				save_img.setEnabled(false);
+				round_corner.setEnabled(true);
+				Drawable myDrawable = getResources().getDrawable(R.drawable.press_cam);
+				iv.setImageDrawable(myDrawable);
 
 			}
 
 		});
-		
+
 		neon_filter.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				//iv.buildDrawingCache();
+				
 				buttonSound.start();
 				BitmapDrawable drawable = (BitmapDrawable) iv.getDrawable();
 				Bitmap bitmap = drawable.getBitmap();
 				Bitmap ok = doInvert(bitmap);
 				iv.setImageBitmap(ok);
+				undo.setEnabled(true);
 
 			}
 
 		});
-		
+
 		gray_scale.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				//iv.buildDrawingCache();
+			
 				buttonSound.start();
 				BitmapDrawable drawable1 = (BitmapDrawable) iv.getDrawable();
 				Bitmap bitmap1 = drawable1.getBitmap();
 				Bitmap ok1 = doGreyscale(bitmap1);
 				iv.setImageBitmap(ok1);
+				undo.setEnabled(true);
+
+			}
+
+		});
+
+		reflection.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				
+				buttonSound.start();
+
+				BitmapDrawable drawable2 = (BitmapDrawable) iv.getDrawable();
+				Bitmap bitmap2 = drawable2.getBitmap();
+				Bitmap ok2 = applyReflection(bitmap2);
+				iv.setImageBitmap(ok2);
+				undo.setEnabled(true);
+
+			}
+
+		});
+
+		undo.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				buttonSound.start();
+				iv.setImageBitmap(img_cam);
 
 			}
 
 		});
 		
-		hue_filter.setOnClickListener(new OnClickListener() {
+		round_corner.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				//iv.buildDrawingCache();
 				buttonSound.start();
 				BitmapDrawable drawable2 = (BitmapDrawable) iv.getDrawable();
 				Bitmap bitmap2 = drawable2.getBitmap();
-				//Bitmap ok2 = applySaturationFilter(bitmap2,1);
-				//iv.setImageBitmap(ok2);
+				Bitmap ok2 = roundCorner(bitmap2,45);
+				iv.setImageBitmap(ok2);
+				undo.setEnabled(true);
+				round_corner.setEnabled(false);
 
 			}
 
@@ -273,19 +335,19 @@ public class Menu extends Activity {
 
 		camera = (Button) findViewById(R.id.Camera);
 		iv = (ImageView) findViewById(R.id.picture);
-		// undo = (Button) findViewById(R.id.undo);
+		undo = (Button) findViewById(R.id.undo);
 		bright_filter = (Button) findViewById(R.id.Filter1);
 		dark_filter = (Button) findViewById(R.id.Filter2);
 		neon_filter = (Button) findViewById(R.id.Filter3);
 		gray_scale = (Button) findViewById(R.id.Filter4);
-		hue_filter = (Button) findViewById(R.id.Filter5);
+		reflection = (Button) findViewById(R.id.Filter5);
+		round_corner = (Button) findViewById(R.id.Filter6);
 
 		crystal_lib = (Button) findViewById(R.id.crystal_img);
 
 		img_lib_but = (Button) findViewById(R.id.img_lib_button);
 
 		save_img = (Button) findViewById(R.id.save_img);
-		
 		
 		
 
@@ -307,7 +369,7 @@ public class Menu extends Activity {
 			img_cam = (Bitmap) data.getExtras().get("data");
 			iv.setImageBitmap(img_cam);
 			Toast.makeText(getApplicationContext(),
-					"Choose a filter to add cool effects!", Toast.LENGTH_LONG)
+					"Choose a filter to add cool effects!", Toast.LENGTH_SHORT)
 					.show();
 		}
 
@@ -317,9 +379,7 @@ public class Menu extends Activity {
 	 * Method for adding a bright filter to an image in the image view
 	 * container.
 	 */
-	
 
-	
 	public void checkSDCard() {
 
 		iv = (ImageView) findViewById(R.id.picture);
@@ -376,119 +436,205 @@ public class Menu extends Activity {
 				.show();
 
 	}
-	
+
 	public static Bitmap doInvert(Bitmap src) {
-	    // create new bitmap with the same settings as source bitmap
-	    Bitmap bmOut = Bitmap.createBitmap(src.getWidth(), src.getHeight(), src.getConfig());
-	    // color info
-	    int A, R, G, B;
-	    int pixelColor;
-	    // image size
-	    int height = src.getHeight();
-	    int width = src.getWidth();
-	 
-	    // scan through every pixel
-	    for (int y = 0; y < height; y++)
-	    {
-	        for (int x = 0; x < width; x++)
-	        {
-	            // get one pixel
-	            pixelColor = src.getPixel(x, y);
-	            // saving alpha channel
-	            A = Color.alpha(pixelColor);
-	            // inverting byte for each R/G/B channel
-	            R = 255 - Color.red(pixelColor);
-	            G = 255 - Color.green(pixelColor);
-	            B = 255 - Color.blue(pixelColor);
-	            // set newly-inverted pixel to output image
-	            bmOut.setPixel(x, y, Color.argb(A, R, G, B));
-	        }
-	    }
-	 
-	    // return final bitmap
-	    return bmOut;
+		// create new bitmap with the same settings as source bitmap
+		Bitmap bmOut = Bitmap.createBitmap(src.getWidth(), src.getHeight(),
+				src.getConfig());
+		// color info
+		int A, R, G, B;
+		int pixelColor;
+		// image size
+		int height = src.getHeight();
+		int width = src.getWidth();
+
+		// scan through every pixel
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				// get one pixel
+				pixelColor = src.getPixel(x, y);
+				// saving alpha channel
+				A = Color.alpha(pixelColor);
+				// inverting byte for each R/G/B channel
+				R = 255 - Color.red(pixelColor);
+				G = 255 - Color.green(pixelColor);
+				B = 255 - Color.blue(pixelColor);
+				// set newly-inverted pixel to output image
+				bmOut.setPixel(x, y, Color.argb(A, R, G, B));
+			}
+		}
+
+		// return final bitmap
+		return bmOut;
 	}
-	
+
 	public static Bitmap doGreyscale(Bitmap src) {
-	    // constant factors
-	    final double GS_RED = 0.299;
-	    final double GS_GREEN = 0.587;
-	    final double GS_BLUE = 0.114;
-	 
-	    // create output bitmap
-	    Bitmap bmOut = Bitmap.createBitmap(src.getWidth(), src.getHeight(), src.getConfig());
-	    // pixel information
-	    int A, R, G, B;
-	    int pixel;
-	 
-	    // get image size
-	    int width = src.getWidth();
-	    int height = src.getHeight();
-	 
-	    // scan through every single pixel
-	    for(int x = 0; x < width; ++x) {
-	        for(int y = 0; y < height; ++y) {
-	            // get one pixel color
-	            pixel = src.getPixel(x, y);
-	            // retrieve color of all channels
-	            A = Color.alpha(pixel);
-	            R = Color.red(pixel);
-	            G = Color.green(pixel);
-	            B = Color.blue(pixel);
-	            // take conversion up to one single value
-	            R = G = B = (int)(GS_RED * R + GS_GREEN * G + GS_BLUE * B);
-	            // set new pixel color to output bitmap
-	            bmOut.setPixel(x, y, Color.argb(A, R, G, B));
-	        }
-	    }
-	 
-	    // return final image
-	    return bmOut;
+		// constant factors
+		final double GS_RED = 0.299;
+		final double GS_GREEN = 0.587;
+		final double GS_BLUE = 0.114;
+
+		// create output bitmap
+		Bitmap bmOut = Bitmap.createBitmap(src.getWidth(), src.getHeight(),
+				src.getConfig());
+		// pixel information
+		int A, R, G, B;
+		int pixel;
+
+		// get image size
+		int width = src.getWidth();
+		int height = src.getHeight();
+
+		// scan through every single pixel
+		for (int x = 0; x < width; ++x) {
+			for (int y = 0; y < height; ++y) {
+				// get one pixel color
+				pixel = src.getPixel(x, y);
+				// retrieve color of all channels
+				A = Color.alpha(pixel);
+				R = Color.red(pixel);
+				G = Color.green(pixel);
+				B = Color.blue(pixel);
+				// take conversion up to one single value
+				R = G = B = (int) (GS_RED * R + GS_GREEN * G + GS_BLUE * B);
+				// set new pixel color to output bitmap
+				bmOut.setPixel(x, y, Color.argb(A, R, G, B));
+			}
+		}
+
+		// return final image
+		return bmOut;
 	}
-	
+
 	public static Bitmap doBrightness(Bitmap src, int value) {
-	    // image size
-	    int width = src.getWidth();
-	    int height = src.getHeight();
-	    // create output bitmap
-	    Bitmap bmOut = Bitmap.createBitmap(width, height, src.getConfig());
-	    // color information
-	    int A, R, G, B;
-	    int pixel;
-	 
-	    // scan through all pixels
-	    for(int x = 0; x < width; ++x) {
-	        for(int y = 0; y < height; ++y) {
-	            // get pixel color
-	            pixel = src.getPixel(x, y);
-	            A = Color.alpha(pixel);
-	            R = Color.red(pixel);
-	            G = Color.green(pixel);
-	            B = Color.blue(pixel);
-	 
-	            // increase/decrease each channel
-	            R += value;
-	            if(R > 255) { R = 255; }
-	            else if(R < 0) { R = 0; }
-	 
-	            G += value;
-	            if(G > 255) { G = 255; }
-	            else if(G < 0) { G = 0; }
-	 
-	            B += value;
-	            if(B > 255) { B = 255; }
-	            else if(B < 0) { B = 0; }
-	 
-	            // apply new pixel color to output bitmap
-	            bmOut.setPixel(x, y, Color.argb(A, R, G, B));
-	        }
-	    }
-	 
-	    // return final image
-	    return bmOut;
+		// image size
+		int width = src.getWidth();
+		int height = src.getHeight();
+		// create output bitmap
+		Bitmap bmOut = Bitmap.createBitmap(width, height, src.getConfig());
+		// color information
+		int A, R, G, B;
+		int pixel;
+
+		// scan through all pixels
+		for (int x = 0; x < width; ++x) {
+			for (int y = 0; y < height; ++y) {
+				// get pixel color
+				pixel = src.getPixel(x, y);
+				A = Color.alpha(pixel);
+				R = Color.red(pixel);
+				G = Color.green(pixel);
+				B = Color.blue(pixel);
+
+				// increase/decrease each channel
+				R += value;
+				if (R > 255) {
+					R = 255;
+				} else if (R < 0) {
+					R = 0;
+				}
+
+				G += value;
+				if (G > 255) {
+					G = 255;
+				} else if (G < 0) {
+					G = 0;
+				}
+
+				B += value;
+				if (B > 255) {
+					B = 255;
+				} else if (B < 0) {
+					B = 0;
+				}
+
+				// apply new pixel color to output bitmap
+				bmOut.setPixel(x, y, Color.argb(A, R, G, B));
+			}
+		}
+
+		// return final image
+		return bmOut;
 	}
-	
-	
+
+	public static Bitmap applyReflection(Bitmap originalImage) {
+		// gap space between original and reflected
+		final int reflectionGap = 4;
+		// get image size
+		int width = originalImage.getWidth();
+		int height = originalImage.getHeight();
+
+		// this will not scale but will flip on the Y axis
+		Matrix matrix = new Matrix();
+		matrix.preScale(1, -1);
+
+		// create a Bitmap with the flip matrix applied to it.
+		// we only want the bottom half of the image
+		Bitmap reflectionImage = Bitmap.createBitmap(originalImage, 0,
+				height / 2, width, height / 2, matrix, false);
+
+		// create a new bitmap with same width but taller to fit reflection
+		Bitmap bitmapWithReflection = Bitmap.createBitmap(width,
+				(height + height / 2), Config.ARGB_8888);
+
+		// create a new Canvas with the bitmap that's big enough for
+		// the image plus gap plus reflection
+		Canvas canvas = new Canvas(bitmapWithReflection);
+		// draw in the original image
+		canvas.drawBitmap(originalImage, 0, 0, null);
+		// draw in the gap
+		Paint defaultPaint = new Paint();
+		canvas.drawRect(0, height, width, height + reflectionGap, defaultPaint);
+		// draw in the reflection
+		canvas.drawBitmap(reflectionImage, 0, height + reflectionGap, null);
+
+		// create a shader that is a linear gradient that covers the reflection
+		Paint paint = new Paint();
+		LinearGradient shader = new LinearGradient(0,
+				originalImage.getHeight(), 0, bitmapWithReflection.getHeight()
+						+ reflectionGap, 0x70ffffff, 0x00ffffff, TileMode.CLAMP);
+		// set the paint to use this shader (linear gradient)
+		paint.setShader(shader);
+		// set the Transfer mode to be porter duff and destination in
+		paint.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
+		// draw a rectangle using the paint with our linear gradient
+		canvas.drawRect(0, height, width, bitmapWithReflection.getHeight()
+				+ reflectionGap, paint);
+
+		return bitmapWithReflection;
+	}
+
+	public static Bitmap roundCorner(Bitmap src, float round) {
+		// image size
+		int width = src.getWidth();
+		int height = src.getHeight();
+		// create bitmap output
+		Bitmap result = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+		// set canvas for painting
+		Canvas canvas = new Canvas(result);
+		canvas.drawARGB(0, 0, 0, 0);
+
+		// config paint
+		final Paint paint = new Paint();
+		paint.setAntiAlias(true);
+		paint.setColor(Color.BLACK);
+
+		// config rectangle for embedding
+		final Rect rect = new Rect(0, 0, width, height);
+		final RectF rectF = new RectF(rect);
+
+		// draw rect to canvas
+		canvas.drawRoundRect(rectF, round, round, paint);
+
+		// create Xfer mode
+		paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+		// draw source image to canvas
+		canvas.drawBitmap(src, rect, rect, paint);
+
+		// return final image
+		return result;
+	}
+
 	@Override
 	protected void onPause() {
 		super.onPause();

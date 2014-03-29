@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -23,18 +24,21 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class CrystalImages extends Activity {
+public class CrystalImages extends Menu {
 
-	ImageView selectedImage;
+
 	private Integer[] mImageIds = { R.drawable.image1, R.drawable.image2,
 			R.drawable.image3, R.drawable.image4, R.drawable.image5,
 			R.drawable.image6, R.drawable.image7, R.drawable.image8,
 			R.drawable.image9, R.drawable.image10, R.drawable.image11 };
+	
+
 
 	Bitmap bi;
 	InputStream is;
 	ImageView iv1;
-	Button bf, bf2, save_img1;
+	Button dark_filter1, bright_filter1, save_img1, neon_filter1, gray_scale2,
+			undo1, reflection2, round_corner1;
 	int time = (int) System.currentTimeMillis();
 	private Bitmap operation;
 
@@ -42,7 +46,20 @@ public class CrystalImages extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.crystal_images);
-
+		
+		initalise_crystal_buttons();
+		
+		Toast.makeText(getApplicationContext(), "Select an image to get started!",
+				Toast.LENGTH_SHORT).show();
+		
+		dark_filter1.setEnabled(false);
+		bright_filter1.setEnabled(false);
+		save_img1.setEnabled(false);
+		neon_filter1.setEnabled(false);
+		gray_scale2.setEnabled(false);
+		reflection2.setEnabled(false);
+		undo1.setEnabled(false);
+		round_corner1.setEnabled(false);
 
 		// BitmapDrawable abmp = (BitmapDrawable)selectedImage.getDrawable();
 		// bi = abmp.getBitmap();
@@ -50,8 +67,8 @@ public class CrystalImages extends Activity {
 		// InputStream is = getResources().openRawResource(R.drawable.image1);
 		// bi = BitmapFactory.decodeStream(is);
 
-		Gallery gallery = (Gallery) findViewById(R.id.gallery1);
-		selectedImage = (ImageView) findViewById(R.id.crystal_img_imgV);
+		final Gallery gallery = (Gallery) findViewById(R.id.gallery1);
+		iv1 = (ImageView) findViewById(R.id.crystal_img_imgV);
 		gallery.setSpacing(1);
 		gallery.setAdapter(new GalleryImageAdapter(this));
 
@@ -59,116 +76,158 @@ public class CrystalImages extends Activity {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 				// show the selected Image
-				selectedImage.setImageResource(mImageIds[position]);
+				iv1.setImageResource(mImageIds[position]);
+				dark_filter1.setEnabled(true);
+				bright_filter1.setEnabled(true);
+				save_img1.setEnabled(true);
+				neon_filter1.setEnabled(true);
+				gray_scale2.setEnabled(true);
+				reflection2.setEnabled(true);
+				round_corner1.setEnabled(true);
+
 			}
 		});
-		
-		
-		
-		bf = (Button) findViewById(R.id.Filter9);
 
-		bf.setOnClickListener(new OnClickListener() {
+		
+
+		dark_filter1.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
 
-				BitmapDrawable abmp = (BitmapDrawable) selectedImage
-						.getDrawable();
-				bi = abmp.getBitmap();
-				bright(selectedImage);
+				buttonSound.start();
+				BitmapDrawable drawable4 = (BitmapDrawable) iv1.getDrawable();
+				Bitmap bitmap3 = drawable4.getBitmap();
+				Bitmap ok4 = doBrightness(bitmap3, -60);
+				iv1.setImageBitmap(ok4);
+				undo1.setEnabled(true);
 
 			}
 
-	
 		});
+
 		
-		bf2 = (Button) findViewById(R.id.Filter10);
-		
-		bf2.setOnClickListener(new OnClickListener() {
+
+		bright_filter1.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
 
-				BitmapDrawable abmp = (BitmapDrawable) selectedImage
-						.getDrawable();
-				bi = abmp.getBitmap();
-				dark(selectedImage);
+				buttonSound.start();
+				BitmapDrawable drawable5 = (BitmapDrawable) iv1.getDrawable();
+				Bitmap bitmap4 = drawable5.getBitmap();
+				Bitmap ok5 = doBrightness(bitmap4, 50);
+				iv1.setImageBitmap(ok5);
+				undo1.setEnabled(true);
 
 			}
 
-	
 		});
-	
-		save_img1 = (Button) findViewById(R.id.save_crystal_img);
+
 		
+		neon_filter1.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+
+				buttonSound.start();
+				BitmapDrawable drawable6 = (BitmapDrawable) iv1.getDrawable();
+				Bitmap bitmap5 = drawable6.getBitmap();
+				Bitmap ok6 = doInvert(bitmap5);
+				iv1.setImageBitmap(ok6);
+				undo1.setEnabled(true);
+
+			}
+
+		});
+
+		
+		gray_scale2.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+
+				buttonSound.start();
+				BitmapDrawable drawable7 = (BitmapDrawable) iv1.getDrawable();
+				Bitmap bitmap6 = drawable7.getBitmap();
+				Bitmap ok7 = doGreyscale(bitmap6);
+				iv1.setImageBitmap(ok7);
+				undo1.setEnabled(true);
+
+			}
+
+		});
+
+		
+		reflection2.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+
+				buttonSound.start();
+				BitmapDrawable drawable8 = (BitmapDrawable) iv1.getDrawable();
+				Bitmap bitmap7 = drawable8.getBitmap();
+				Bitmap ok8 = applyReflection(bitmap7);
+				iv1.setImageBitmap(ok8);
+				reflection2.setEnabled(false);
+				undo1.setEnabled(true);
+
+			}
+
+		});
+
+		
+
 		save_img1.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-
+				
+				buttonSound.start();
 				checkSDCard();
+				reflection2.setEnabled(true);
+				Drawable myDrawable = getResources().getDrawable(R.drawable.undo_image);
+				iv1.setImageDrawable(myDrawable);
+				round_corner1.setEnabled(true);
 
 			}
 
-	
 		});
 		
-	}
-	
-	
-	
-	
+		undo1.setOnClickListener(new OnClickListener() {
 
-	public void bright(View view) {
-		operation = Bitmap.createBitmap(bi.getWidth(), bi.getHeight(),
-				bi.getConfig());
+			@Override
+			public void onClick(View view) {
 
-		for (int i = 0; i < bi.getWidth(); i++) {
-			for (int j = 0; j < bi.getHeight(); j++) {
-				int p = bi.getPixel(i, j);
-				int r = Color.red(p);
-				int g = Color.green(p);
-				int b = Color.blue(p);
-				int alpha = Color.alpha(p);
-
-				r = 100 + r;
-				g = 100 + g;
-				b = 100 + b;
-				alpha = 100 + alpha;
-
-				operation.setPixel(i, j, Color.argb(alpha, r, g, b));
+				buttonSound.start();
+				Drawable myDrawable = getResources().getDrawable(R.drawable.undo_image);
+				iv1.setImageDrawable(myDrawable);
+				reflection2.setEnabled(true);
 			}
-		}
-		selectedImage.setImageBitmap(operation);
-	}
 
-	public void dark(View view) {
-		operation = Bitmap.createBitmap(bi.getWidth(), bi.getHeight(),
-				bi.getConfig());
+		});
+		
+		round_corner1.setOnClickListener(new OnClickListener() {
 
-		for (int i = 0; i < bi.getWidth(); i++) {
-			for (int j = 0; j < bi.getHeight(); j++) {
-				int p = bi.getPixel(i, j);
-				int r = Color.red(p);
-				int g = Color.green(p);
-				int b = Color.blue(p);
-				int alpha = Color.alpha(p);
-
-				r = r - 50;
-				g = g - 50;
-				b = b - 50;
-				alpha = alpha - 50;
-				operation.setPixel(i, j, Color.argb(Color.alpha(p), r, g, b));
-
+			@Override
+			public void onClick(View view) {
+				
+				buttonSound.start();
+				BitmapDrawable drawable9 = (BitmapDrawable) iv1.getDrawable();
+				Bitmap bitmap8 = drawable9.getBitmap();
+				Bitmap ok9 = roundCorner(bitmap8,45);
+				iv1.setImageBitmap(ok9);
+				round_corner.setEnabled(false);
+				
+				
 			}
-		}
 
-		selectedImage.setImageBitmap(operation);
+		});
+
 	}
-	
+
 	public void checkSDCard() {
 
-		iv1 = (ImageView) findViewById(R.id.crystal_img_imgV);
 		BitmapDrawable drawable = (BitmapDrawable) iv1.getDrawable(); // convert
 																		// imageview
 																		// to
@@ -217,9 +276,21 @@ public class CrystalImages extends Activity {
 					Toast.LENGTH_SHORT).show();
 		}
 
-		Toast.makeText(getApplicationContext(),
-				"Try adding an effect to another image!", Toast.LENGTH_SHORT)
-				.show();
+		Toast.makeText(getApplicationContext(), "Try another image!",
+				Toast.LENGTH_SHORT).show();
 
 	}
+
+	public void initalise_crystal_buttons() {
+
+		save_img1 = (Button) findViewById(R.id.save_crystal_img);
+		reflection2 = (Button) findViewById(R.id.Filter13);
+		gray_scale2 = (Button) findViewById(R.id.Filter12);
+		neon_filter1 = (Button) findViewById(R.id.Filter11);
+		bright_filter1 = (Button) findViewById(R.id.Filter10);
+		dark_filter1 = (Button) findViewById(R.id.Filter9);
+		undo1 = (Button) findViewById(R.id.Undo_crystal_img);
+		round_corner1 = (Button) findViewById(R.id.Filter14);
+	}
+
 }
