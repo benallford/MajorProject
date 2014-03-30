@@ -2,6 +2,7 @@ package com.bea10.majorproject;
 
 import java.net.URLEncoder;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -20,5 +21,9 @@ public class LoadImageFromSDCardActivity extends Activity {
 	}
 
 	
-	
+	@Override
+	public void onBackPressed(){
+	    startActivity( new Intent(this, Menu.class) );
+	    finish();
+	}
 }

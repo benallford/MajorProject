@@ -26,19 +26,16 @@ import android.widget.Toast;
 
 public class CrystalImages extends Menu {
 
-
 	private Integer[] mImageIds = { R.drawable.image1, R.drawable.image2,
 			R.drawable.image3, R.drawable.image4, R.drawable.image5,
 			R.drawable.image6, R.drawable.image7, R.drawable.image8,
 			R.drawable.image9, R.drawable.image10, R.drawable.image11 };
-	
-
 
 	Bitmap bi;
 	InputStream is;
 	ImageView iv1;
 	Button dark_filter1, bright_filter1, save_img1, neon_filter1, gray_scale2,
-			undo1, reflection2, round_corner1;
+			undo1, reflection2, round_corner1, highlight1, tint_filter1;
 	int time = (int) System.currentTimeMillis();
 	private Bitmap operation;
 
@@ -46,12 +43,12 @@ public class CrystalImages extends Menu {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.crystal_images);
-		
+
 		initalise_crystal_buttons();
-		
-		Toast.makeText(getApplicationContext(), "Select an image to get started!",
-				Toast.LENGTH_SHORT).show();
-		
+
+		Toast.makeText(getApplicationContext(),
+				"Select an image to get started!", Toast.LENGTH_SHORT).show();
+
 		dark_filter1.setEnabled(false);
 		bright_filter1.setEnabled(false);
 		save_img1.setEnabled(false);
@@ -88,8 +85,6 @@ public class CrystalImages extends Menu {
 			}
 		});
 
-		
-
 		dark_filter1.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -105,8 +100,6 @@ public class CrystalImages extends Menu {
 			}
 
 		});
-
-		
 
 		bright_filter1.setOnClickListener(new OnClickListener() {
 
@@ -124,7 +117,6 @@ public class CrystalImages extends Menu {
 
 		});
 
-		
 		neon_filter1.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -141,7 +133,6 @@ public class CrystalImages extends Menu {
 
 		});
 
-		
 		gray_scale2.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -158,7 +149,6 @@ public class CrystalImages extends Menu {
 
 		});
 
-		
 		reflection2.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -176,50 +166,84 @@ public class CrystalImages extends Menu {
 
 		});
 
-		
-
 		save_img1.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-				
+
 				buttonSound.start();
 				checkSDCard();
 				reflection2.setEnabled(true);
-				Drawable myDrawable = getResources().getDrawable(R.drawable.undo_image);
+				Drawable myDrawable = getResources().getDrawable(
+						R.drawable.undo_image);
 				iv1.setImageDrawable(myDrawable);
 				round_corner1.setEnabled(true);
 
 			}
 
 		});
-		
+
 		undo1.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
 
 				buttonSound.start();
-				Drawable myDrawable = getResources().getDrawable(R.drawable.undo_image);
+				Drawable myDrawable = getResources().getDrawable(
+						R.drawable.undo_image);
 				iv1.setImageDrawable(myDrawable);
 				reflection2.setEnabled(true);
 			}
 
 		});
-		
+
 		round_corner1.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-				
+
 				buttonSound.start();
 				BitmapDrawable drawable9 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap8 = drawable9.getBitmap();
-				Bitmap ok9 = roundCorner(bitmap8,45);
+				Bitmap ok9 = roundCorner(bitmap8, 45);
 				iv1.setImageBitmap(ok9);
 				round_corner.setEnabled(false);
-				
-				
+				undo1.setEnabled(true);
+
+			}
+
+		});
+
+		highlight1.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+
+				buttonSound.start();
+				BitmapDrawable drawable9 = (BitmapDrawable) iv1.getDrawable();
+				Bitmap bitmap8 = drawable9.getBitmap();
+				Bitmap ok9 = applyShadingFilter(bitmap8, -17000);
+				iv1.setImageBitmap(ok9);
+				round_corner.setEnabled(false);
+				undo1.setEnabled(true);
+
+			}
+
+		});
+
+		tint_filter1.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+
+				buttonSound.start();
+				BitmapDrawable drawable9 = (BitmapDrawable) iv1.getDrawable();
+				Bitmap bitmap8 = drawable9.getBitmap();
+				Bitmap ok9 = getTintImage(bitmap8, -17000);
+				iv1.setImageBitmap(ok9);
+				round_corner.setEnabled(false);
+				undo1.setEnabled(true);
+
 			}
 
 		});
@@ -291,6 +315,15 @@ public class CrystalImages extends Menu {
 		dark_filter1 = (Button) findViewById(R.id.Filter9);
 		undo1 = (Button) findViewById(R.id.Undo_crystal_img);
 		round_corner1 = (Button) findViewById(R.id.Filter14);
+		highlight1 = (Button) findViewById(R.id.Filter15);
+		tint_filter1 = (Button) findViewById(R.id.Filter16);
+
+	}
+
+	@Override
+	public void onBackPressed() {
+		startActivity(new Intent(this, Menu.class));
+		finish();
 	}
 
 }

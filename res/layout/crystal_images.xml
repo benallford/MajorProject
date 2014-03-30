@@ -68,6 +68,18 @@
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 6" />
+             <Button
+                android:id="@+id/Filter15"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Filter 7" />
+             <Button
+                android:id="@+id/Filter16"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Filter 8" />
             
         </LinearLayout>
     </HorizontalScrollView>
