@@ -252,7 +252,8 @@ public class CrystalImages extends Menu {
 
 	public void checkSDCard() {
 
-		BitmapDrawable drawable = (BitmapDrawable) iv1.getDrawable(); // convert
+		iv1 = (ImageView) findViewById(R.id.crystal_img_imgV);
+		BitmapDrawable drawable = (BitmapDrawable) iv.getDrawable(); // convert
 																		// imageview
 																		// to
 																		// bitmap
@@ -300,8 +301,7 @@ public class CrystalImages extends Menu {
 					Toast.LENGTH_SHORT).show();
 		}
 
-		Toast.makeText(getApplicationContext(), "Try another image!",
-				Toast.LENGTH_SHORT).show();
+		
 
 	}
 

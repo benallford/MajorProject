@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 import android.annotation.SuppressLint;
@@ -12,6 +13,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -37,6 +39,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.util.FloatMath;
@@ -58,9 +61,22 @@ public class Menu extends Activity {
 	Button camera, but2, undo;
 	static ImageView iv;
 	Button bright_filter, dark_filter, neon_filter, img_lib_but, crystal_lib,
-			save_img, gray_scale, reflection, round_corner, highlight;
+			save_img, gray_scale, reflection, round_corner, highlight,
+			filter_test;
 	Drawable myDrawable;
 	Editable value;
+
+	int draw[] = {R.drawable.image1,
+	  R.drawable.image2,
+	  R.drawable.image3,
+	  R.drawable.image4,
+	  R.drawable.image5,
+	  R.drawable.image6,
+	  R.drawable.image7,
+	  R.drawable.image8,
+	 R.drawable.image9,
+ R.drawable.image10,
+	 R.drawable.image11};
 
 	MediaPlayer buttonSound;
 	Bitmap bmp, operation, img_cam;
@@ -75,17 +91,18 @@ public class Menu extends Activity {
 	static final int DRAG = 1;
 	static final int ZOOM = 2;
 	int mode = NONE;
-	ImageProcessor ip;
 	public static final double PI = 3.14159d;
-    public static final double FULL_CIRCLE_DEGREE = 360d;
-    public static final double HALF_CIRCLE_DEGREE = 180d;
-    public static final double RANGE = 256d;
+	public static final double FULL_CIRCLE_DEGREE = 360d;
+	public static final double HALF_CIRCLE_DEGREE = 180d;
+	public static final double RANGE = 256d;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		
 
 		buttonSound = MediaPlayer.create(this, R.raw.button_click);// creating
 																	// an object
@@ -97,7 +114,9 @@ public class Menu extends Activity {
 																	// for
 																	// button
 																	// clicks
-
+		
+		
+		
 		initalise(); // get buttons etc
 		save_img.setEnabled(false);
 		undo.setEnabled(false);
@@ -107,6 +126,7 @@ public class Menu extends Activity {
 		gray_scale.setEnabled(false);
 		reflection.setEnabled(false);
 		round_corner.setEnabled(false);
+		
 
 		img_lib_but.setOnClickListener(new OnClickListener() {
 
@@ -135,11 +155,12 @@ public class Menu extends Activity {
 				buttonSound.start();
 				Context context = Menu.this;
 				PackageManager packageManager = context.getPackageManager();
-		 
+
 				// if device support camera?
-				if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-					//yes
-					//Log.i("camera", "This device has camera!");
+				if (packageManager
+						.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+					// yes
+					// Log.i("camera", "This device has camera!");
 					Intent intent = new Intent(
 							android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 					startActivityForResult(intent, 0);
@@ -151,16 +172,16 @@ public class Menu extends Activity {
 					reflection.setEnabled(true);
 					round_corner.setEnabled(true);
 					undo.setEnabled(true);
-				}else{
-					//no
-					//Log.i("camera", "This device has no camera!");
+
+				} else {
+					// no
+					// Log.i("camera", "This device has no camera!");
 					Toast.makeText(getApplicationContext(),
-							"You need a Camera to use this feature!", Toast.LENGTH_SHORT)
-							.show();
-					
+							"You need a Camera to use this feature!",
+							Toast.LENGTH_SHORT).show();
+
 				}
-				
-				
+
 			}
 
 		});
@@ -318,12 +339,23 @@ public class Menu extends Activity {
 				BitmapDrawable drawable2 = (BitmapDrawable) iv.getDrawable();
 				Bitmap bitmap2 = drawable2.getBitmap();
 
-				Bitmap ok2 = getTintImage(bitmap2, 10);
+				Bitmap ok2 = getTintImage(bitmap2, 30);
 				iv.setImageBitmap(ok2);
 
 				undo.setEnabled(true);
 
 			}
+		});
+
+		filter_test.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				buttonSound.start();
+				
+
+			}
+
 		});
 
 		iv.setOnTouchListener(new View.OnTouchListener() {
@@ -396,6 +428,7 @@ public class Menu extends Activity {
 		reflection = (Button) findViewById(R.id.Filter5);
 		round_corner = (Button) findViewById(R.id.Filter6);
 		highlight = (Button) findViewById(R.id.Filter7);
+		filter_test = (Button) findViewById(R.id.FilterTest);
 
 		crystal_lib = (Button) findViewById(R.id.crystal_img);
 
@@ -423,6 +456,7 @@ public class Menu extends Activity {
 			Toast.makeText(getApplicationContext(),
 					"Choose a filter to add cool effects!", Toast.LENGTH_SHORT)
 					.show();
+
 		}
 
 	}
@@ -712,58 +746,65 @@ public class Menu extends Activity {
 		return bmOut;
 	}
 
-public static Bitmap getTintImage(Bitmap src, int degree) {
-        
+	public static Bitmap getTintImage(Bitmap src, int degree) {
 
-        int width = src.getWidth();
-        int height = src.getHeight();
+		int width = src.getWidth();
+		int height = src.getHeight();
 
-        int[] pix = new int[width * height];
-        src.getPixels(pix, 0, width, 0, 0, width, height);
+		int[] pix = new int[width * height];
+		src.getPixels(pix, 0, width, 0, 0, width, height);
 
-        int RY, GY, BY, RYY, GYY, BYY, R, G, B, Y;
-        double angle = (PI * (double) degree) / HALF_CIRCLE_DEGREE;
+		int RY, GY, BY, RYY, GYY, BYY, R, G, B, Y;
+		double angle = (PI * (double) degree) / HALF_CIRCLE_DEGREE;
 
-        int S = (int) (RANGE * Math.sin(angle));
-        int C = (int) (RANGE * Math.cos(angle));
+		int S = (int) (RANGE * Math.sin(angle));
+		int C = (int) (RANGE * Math.cos(angle));
 
-        for (int y = 0; y < height; y++)
-            for (int x = 0; x < width; x++) {
-                int index = y * width + x;
-                int r = (pix[index] >> 16) & 0xff;
-                int g = (pix[index] >> 8) & 0xff;
-                int b = pix[index] & 0xff;
-                RY = (70 * r - 59 * g - 11 * b) / 100;
-                GY = (-30 * r + 41 * g - 11 * b) / 100;
-                BY = (-30 * r - 59 * g + 89 * b) / 100;
-                Y = (30 * r + 59 * g + 11 * b) / 100;
-                RYY = (S * BY + C * RY) / 256;
-                BYY = (C * BY - S * RY) / 256;
-                GYY = (-51 * RYY - 19 * BYY) / 100;
-                R = Y + RYY;
-                R = (R < 0) ? 0 : ((R > 255) ? 255 : R);
-                G = Y + GYY;
-                G = (G < 0) ? 0 : ((G > 255) ? 255 : G);
-                B = Y + BYY;
-                B = (B < 0) ? 0 : ((B > 255) ? 255 : B);
-                pix[index] = 0xff000000 | (R << 16) | (G << 8) | B;
-            }
+		for (int y = 0; y < height; y++)
+			for (int x = 0; x < width; x++) {
+				int index = y * width + x;
+				int r = (pix[index] >> 16) & 0xff;
+				int g = (pix[index] >> 8) & 0xff;
+				int b = pix[index] & 0xff;
+				RY = (70 * r - 59 * g - 11 * b) / 100;
+				GY = (-30 * r + 41 * g - 11 * b) / 100;
+				BY = (-30 * r - 59 * g + 89 * b) / 100;
+				Y = (30 * r + 59 * g + 11 * b) / 100;
+				RYY = (S * BY + C * RY) / 256;
+				BYY = (C * BY - S * RY) / 256;
+				GYY = (-51 * RYY - 19 * BYY) / 100;
+				R = Y + RYY;
+				R = (R < 0) ? 0 : ((R > 255) ? 255 : R);
+				G = Y + GYY;
+				G = (G < 0) ? 0 : ((G > 255) ? 255 : G);
+				B = Y + BYY;
+				B = (B < 0) ? 0 : ((B > 255) ? 255 : B);
+				pix[index] = 0xff000000 | (R << 16) | (G << 8) | B;
+			}
 
-        Bitmap outBitmap = Bitmap.createBitmap(width, height, src.getConfig());
-        outBitmap.setPixels(pix, 0, width, 0, 0, width, height);
+		Bitmap outBitmap = Bitmap.createBitmap(width, height, src.getConfig());
+		outBitmap.setPixels(pix, 0, width, 0, 0, width, height);
 
-        pix = null;
+		pix = null;
 
-        return outBitmap;
-    }
+		return outBitmap;
+	}
 
-
+	
 
 	@Override
-	protected void onResume() {
+	public void onBackPressed() {
 
-		super.onResume();
+		finish();
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		startActivity(intent);
 
 	}
+
+	
+	
+	
 
 }

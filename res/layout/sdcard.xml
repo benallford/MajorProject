@@ -4,10 +4,29 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/Picture_Button1"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher" />
+        android:text="Choose Picture 1" />
+
+    <Button
+        android:id="@+id/Picture_Button2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose Picture 2" />
+
+    <ImageView
+        android:id="@+id/CompositeImageView"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp" >
+
+    </ImageView>
+    
+    <Button
+        android:id="@+id/SaveImg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Image" />
 
 </LinearLayout>
