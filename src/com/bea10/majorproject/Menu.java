@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -36,6 +37,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
+import android.media.effect.EffectFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -62,7 +64,7 @@ public class Menu extends Activity {
 	static ImageView iv;
 	Button bright_filter, dark_filter, neon_filter, img_lib_but, crystal_lib,
 			save_img, gray_scale, reflection, round_corner, highlight,
-			filter_test;
+			shading;
 	Drawable myDrawable;
 	Editable value;
 
@@ -79,7 +81,7 @@ public class Menu extends Activity {
 	 R.drawable.image11};
 
 	MediaPlayer buttonSound;
-	Bitmap bmp, operation, img_cam;
+	Bitmap bmp, operation, img_cam; 
 	String imageNameForSDCard;
 	int time = (int) System.currentTimeMillis();
 	Matrix matrix = new Matrix();
@@ -95,12 +97,12 @@ public class Menu extends Activity {
 	public static final double FULL_CIRCLE_DEGREE = 360d;
 	public static final double HALF_CIRCLE_DEGREE = 180d;
 	public static final double RANGE = 256d;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
 		
 
@@ -126,6 +128,7 @@ public class Menu extends Activity {
 		gray_scale.setEnabled(false);
 		reflection.setEnabled(false);
 		round_corner.setEnabled(false);
+		highlight.setEnabled(false);
 		
 
 		img_lib_but.setOnClickListener(new OnClickListener() {
@@ -140,6 +143,8 @@ public class Menu extends Activity {
 			}
 
 		});
+		
+		
 
 		camera.setOnClickListener(new OnClickListener() {
 
@@ -172,6 +177,7 @@ public class Menu extends Activity {
 					reflection.setEnabled(true);
 					round_corner.setEnabled(true);
 					undo.setEnabled(true);
+					highlight.setEnabled(true);
 
 				} else {
 					// no
@@ -347,12 +353,18 @@ public class Menu extends Activity {
 			}
 		});
 
-		filter_test.setOnClickListener(new OnClickListener() {
+		shading.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				buttonSound.start();
-				
+				BitmapDrawable drawable2 = (BitmapDrawable) iv.getDrawable();
+				Bitmap bitmap2 = drawable2.getBitmap();
+
+				Bitmap ok2 = applyShadingFilter(bitmap2, -7500);
+				iv.setImageBitmap(ok2);
+
+				undo.setEnabled(true);
 
 			}
 
@@ -428,7 +440,7 @@ public class Menu extends Activity {
 		reflection = (Button) findViewById(R.id.Filter5);
 		round_corner = (Button) findViewById(R.id.Filter6);
 		highlight = (Button) findViewById(R.id.Filter7);
-		filter_test = (Button) findViewById(R.id.FilterTest);
+		shading = (Button) findViewById(R.id.FilterTest);
 
 		crystal_lib = (Button) findViewById(R.id.crystal_img);
 
@@ -461,10 +473,7 @@ public class Menu extends Activity {
 
 	}
 
-	/*
-	 * Method for adding a bright filter to an image in the image view
-	 * container.
-	 */
+	
 
 	public void checkSDCard() {
 
@@ -790,6 +799,7 @@ public class Menu extends Activity {
 		return outBitmap;
 	}
 
+		
 	
 
 	@Override
@@ -799,7 +809,7 @@ public class Menu extends Activity {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.addCategory(Intent.CATEGORY_HOME);
-		startActivity(intent);
+		startActivity(intent); //end all activities and return to home screen 
 
 	}
 

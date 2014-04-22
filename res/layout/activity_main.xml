@@ -31,7 +31,7 @@
     <ImageView
         android:id="@+id/picture"
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="181dp"
         android:src="@drawable/press_cam" />
 
     <HorizontalScrollView
@@ -73,33 +73,34 @@
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 4" />
+
             <Button
                 android:id="@+id/Filter5"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 5" />
+
             <Button
                 android:id="@+id/Filter6"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 6" />
+
             <Button
                 android:id="@+id/Filter7"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 7" />
-            <Button 
+
+            <Button
                 android:id="@+id/FilterTest"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="Load images"
-                
-                />
-            
+                android:text="Filter 8" />
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -107,17 +108,14 @@
         android:id="@+id/save_img"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Save Image"
         android:layout_gravity="bottom"
-        android:layout_weight="1" />
-    
+        android:text="Save Image" />
+
     <Button
         android:id="@+id/undo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Undo"
         android:layout_gravity="bottom"
-        android:layout_weight="1" 
-        />
+        android:text="Undo" />
 
 </LinearLayout>

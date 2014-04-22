@@ -19,14 +19,51 @@
     <ImageView
         android:id="@+id/CompositeImageView"
         android:layout_width="fill_parent"
-        android:layout_height="250dp" >
+        android:layout_height="200dp"
+        android:layout_weight="1.02" >
 
     </ImageView>
-    
+
     <Button
         android:id="@+id/SaveImg"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Save Image" />
+     <HorizontalScrollView
+        android:id="@+id/hsv1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/Filter20"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Filter 1" />
+
+            <Button
+                android:id="@+id/Filter21"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Filter 2" />
+
+            <Button
+                android:id="@+id/Filter22"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Filter 3" />
+
+           
+        </LinearLayout>
+    </HorizontalScrollView>
 
 </LinearLayout>

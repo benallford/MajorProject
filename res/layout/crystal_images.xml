@@ -12,10 +12,11 @@
 
     <ImageView
         android:id="@+id/crystal_img_imgV"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="247dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp" />
+        android:layout_marginTop="25dp"
+        android:layout_weight="0.37" />
 
     <HorizontalScrollView
         android:id="@+id/hsv1"
@@ -56,31 +57,34 @@
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 4" />
+
             <Button
                 android:id="@+id/Filter13"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 5" />
+
             <Button
                 android:id="@+id/Filter14"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 6" />
-             <Button
+
+            <Button
                 android:id="@+id/Filter15"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 7" />
-             <Button
+
+            <Button
                 android:id="@+id/Filter16"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 8" />
-            
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -88,16 +92,14 @@
         android:id="@+id/save_crystal_img"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Save Image"
         android:layout_gravity="bottom"
-        android:layout_weight="1" />
-    
+        android:text="Save Image" />
+
     <Button
         android:id="@+id/Undo_crystal_img"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Undo"
         android:layout_gravity="bottom"
-        android:layout_weight="1" />
+        android:text="Undo" />
 
 </LinearLayout>

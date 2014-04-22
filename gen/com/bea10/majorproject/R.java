@@ -41,47 +41,47 @@ public final class R {
     }
     public static final class id {
         public static final int Camera=0x7f090000;
-        public static final int ChoosePictureButton1=0x7f09000f;
-        public static final int ChoosePictureButton2=0x7f090010;
-        public static final int CompositeImageView=0x7f090011;
+        public static final int CompositeImageView=0x7f09001d;
         public static final int Filter1=0x7f090005;
-        public static final int Filter10=0x7f090015;
-        public static final int Filter11=0x7f090016;
-        public static final int Filter12=0x7f090017;
-        public static final int Filter13=0x7f090018;
-        public static final int Filter14=0x7f090019;
-        public static final int Filter15=0x7f09001a;
-        public static final int Filter16=0x7f09001b;
+        public static final int Filter10=0x7f090012;
+        public static final int Filter11=0x7f090013;
+        public static final int Filter12=0x7f090014;
+        public static final int Filter13=0x7f090015;
+        public static final int Filter14=0x7f090016;
+        public static final int Filter15=0x7f090017;
+        public static final int Filter16=0x7f090018;
         public static final int Filter2=0x7f090006;
+        public static final int Filter20=0x7f09001f;
+        public static final int Filter21=0x7f090020;
+        public static final int Filter22=0x7f090021;
         public static final int Filter3=0x7f090007;
         public static final int Filter4=0x7f090008;
         public static final int Filter5=0x7f090009;
         public static final int Filter6=0x7f09000a;
         public static final int Filter7=0x7f09000b;
-        public static final int Filter9=0x7f090014;
+        public static final int Filter9=0x7f090011;
         public static final int FilterTest=0x7f09000c;
-        public static final int Picture_Button1=0x7f09001e;
-        public static final int Picture_Button2=0x7f09001f;
-        public static final int SaveImg=0x7f090020;
-        public static final int Undo_crystal_img=0x7f09001d;
-        public static final int action_settings=0x7f090021;
+        public static final int Picture_Button1=0x7f09001b;
+        public static final int Picture_Button2=0x7f09001c;
+        public static final int SaveImg=0x7f09001e;
+        public static final int Undo_crystal_img=0x7f09001a;
+        public static final int action_settings=0x7f090022;
         public static final int crystal_img=0x7f090002;
-        public static final int crystal_img_imgV=0x7f090013;
-        public static final int gallery1=0x7f090012;
+        public static final int crystal_img_imgV=0x7f090010;
+        public static final int gallery1=0x7f09000f;
         public static final int hsv1=0x7f090004;
         public static final int img_lib_button=0x7f090001;
         public static final int picture=0x7f090003;
-        public static final int save_crystal_img=0x7f09001c;
+        public static final int save_crystal_img=0x7f090019;
         public static final int save_img=0x7f09000d;
         public static final int undo=0x7f09000e;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int camera=0x7f030001;
-        public static final int choose=0x7f030002;
-        public static final int crystal_images=0x7f030003;
-        public static final int sdcard=0x7f030004;
-        public static final int splash_screen=0x7f030005;
+        public static final int crystal_images=0x7f030002;
+        public static final int sdcard=0x7f030003;
+        public static final int splash_screen=0x7f030004;
     }
     public static final class menu {
         public static final int main=0x7f080000;
