@@ -129,6 +129,7 @@ public class Menu extends Activity {
 		reflection.setEnabled(false);
 		round_corner.setEnabled(false);
 		highlight.setEnabled(false);
+		shading.setEnabled(false);
 		
 
 		img_lib_but.setOnClickListener(new OnClickListener() {
@@ -178,6 +179,7 @@ public class Menu extends Activity {
 					round_corner.setEnabled(true);
 					undo.setEnabled(true);
 					highlight.setEnabled(true);
+					shading.setEnabled(true);
 
 				} else {
 					// no
@@ -369,6 +371,8 @@ public class Menu extends Activity {
 			}
 
 		});
+		
+		
 
 		iv.setOnTouchListener(new View.OnTouchListener() {
 			@Override
@@ -440,7 +444,9 @@ public class Menu extends Activity {
 		reflection = (Button) findViewById(R.id.Filter5);
 		round_corner = (Button) findViewById(R.id.Filter6);
 		highlight = (Button) findViewById(R.id.Filter7);
-		shading = (Button) findViewById(R.id.FilterTest);
+		shading = (Button) findViewById(R.id.Filter8);
+
+
 
 		crystal_lib = (Button) findViewById(R.id.crystal_img);
 
@@ -498,7 +504,7 @@ public class Menu extends Activity {
 																// SD card is
 																// available
 
-		if (Environment.MEDIA_MOUNTED.equals(state)) { // if so then write to it
+		if (Environment.MEDIA_MOUNTED.equals(state)) { // if available
 			FileOutputStream outStream;
 			try {
 

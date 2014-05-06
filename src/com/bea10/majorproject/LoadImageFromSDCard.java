@@ -31,13 +31,15 @@ public class LoadImageFromSDCard extends Activity implements OnClickListener {
 	static final int PICKED_TWO = 1;
 	boolean onePicked = false;
 	boolean twoPicked = false;
-	Button Picture1, Picture2, Save, roundCorner, reflect, hollow_effect;
+	Button Picture1, Picture2, Save, roundCorner, reflect;
 
-	ImageView compositeImageView;
+	ImageView ImageView;
 	Bitmap bmp1, bmp2;
 
 	Canvas canvas;
 	Paint paint;
+	
+	Menu m;
 
 	int time = (int) System.currentTimeMillis();
 
@@ -47,15 +49,28 @@ public class LoadImageFromSDCard extends Activity implements OnClickListener {
 		setContentView(R.layout.sdcard);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+		
+		
+		m = new Menu();
 		initalise_buttons();
 		Picture1.setOnClickListener(this);
 		Picture2.setOnClickListener(this);
+		
+		roundCorner.setEnabled(false);
+		reflect.setEnabled(false);
 
 		roundCorner.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 
+				
+				BitmapDrawable drawable2 = (BitmapDrawable) ImageView.getDrawable();
+				Bitmap bitmap2 = drawable2.getBitmap();
+
+				Bitmap ok2 = Menu.roundCorner(bitmap2, 45);
+				ImageView.setImageBitmap(ok2);
+				roundCorner.setEnabled(false);
 			}
 
 		});
@@ -64,19 +79,18 @@ public class LoadImageFromSDCard extends Activity implements OnClickListener {
 
 			@Override
 			public void onClick(View arg0) {
+				
+				BitmapDrawable drawable2 = (BitmapDrawable) ImageView.getDrawable();
+				Bitmap bitmap2 = drawable2.getBitmap();
 
+				Bitmap ok2 = Menu.applyReflection(bitmap2);
+				ImageView.setImageBitmap(ok2);
+				reflect.setEnabled(false);
 			}
 
 		});
 
-		hollow_effect.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-
-			}
-
-		});
+		
 
 		Save.setOnClickListener(new OnClickListener() {
 
@@ -84,6 +98,9 @@ public class LoadImageFromSDCard extends Activity implements OnClickListener {
 			public void onClick(View arg0) {
 
 				checkSDCard();
+				roundCorner.setEnabled(false);
+				reflect.setEnabled(false);
+				ImageView.setImageResource(R.drawable.ic_launcher);
 
 			}
 
@@ -122,9 +139,13 @@ public class LoadImageFromSDCard extends Activity implements OnClickListener {
 				paint = new Paint();
 				canvas.drawBitmap(bmp1, 0, 0, paint);
 				paint.setXfermode(new PorterDuffXfermode(
-						android.graphics.PorterDuff.Mode.SCREEN));
+						android.graphics.PorterDuff.Mode.SCREEN)); 
 				canvas.drawBitmap(bmp2, 0, 0, paint);
-				compositeImageView.setImageBitmap(drawingBitmap);
+				ImageView.setImageBitmap(drawingBitmap);
+				roundCorner.setEnabled(true);
+				reflect.setEnabled(true);
+				
+				
 			}
 		}
 	}
@@ -170,8 +191,8 @@ public class LoadImageFromSDCard extends Activity implements OnClickListener {
 
 	public void checkSDCard() {
 
-		compositeImageView = (ImageView) findViewById(R.id.CompositeImageView);
-		BitmapDrawable drawable = (BitmapDrawable) compositeImageView
+		ImageView = (ImageView) findViewById(R.id.CompositeImageView);
+		BitmapDrawable drawable = (BitmapDrawable) ImageView
 				.getDrawable(); // convert
 		// imageview
 		// to
@@ -224,14 +245,14 @@ public class LoadImageFromSDCard extends Activity implements OnClickListener {
 
 	public void initalise_buttons() {
 
-		compositeImageView = (ImageView) this
+		ImageView = (ImageView) this
 				.findViewById(R.id.CompositeImageView);
 		Picture1 = (Button) this.findViewById(R.id.Picture_Button1);
 		Picture2 = (Button) this.findViewById(R.id.Picture_Button2);
 		Save = (Button) findViewById(R.id.SaveImg);
 		roundCorner = (Button) findViewById(R.id.Filter20);
 		reflect = (Button) findViewById(R.id.Filter21);
-		hollow_effect = (Button) findViewById(R.id.Filter22);
+		
 
 	}
 

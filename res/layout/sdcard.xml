@@ -43,24 +43,19 @@
 
             <Button
                 android:id="@+id/Filter20"
-                android:layout_width="125dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 1" />
 
             <Button
                 android:id="@+id/Filter21"
-                android:layout_width="125dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="Filter 2" />
 
-            <Button
-                android:id="@+id/Filter22"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="Filter 3" />
+            
 
            
         </LinearLayout>

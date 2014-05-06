@@ -7,7 +7,7 @@
 	android:installLocation="auto"
 >
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11" 
         android:targetSdkVersion="17" />
 
     <uses-feature android:name="android.hardware.camera" >
