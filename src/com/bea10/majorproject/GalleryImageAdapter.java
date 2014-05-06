@@ -6,13 +6,22 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
-
+/* 
+ * 
+ * This class allows the use of the gallery and gives access to methods for getting the length of the array which contains the images,
+ *  it allows us to get them item at a certain position of the array and allows us to get the item id of an image in the array.
+ *  
+ *  The items of Gallery are populated from an Adapter, similar to ListView, in which ListView items are populated from an Adapter.
+ *  
+ *  
+ *  
+ */
 public class GalleryImageAdapter extends BaseAdapter {
 	private Context mContext;
 
-	private Integer[] mImageIds = { R.drawable.image1, R.drawable.image2,
+	private Integer[] ImageIds = { R.drawable.image1, R.drawable.image2,
 			R.drawable.image3, R.drawable.image4, R.drawable.image5,
-			R.drawable.image6, R.drawable.image7, R.drawable.image8, R.drawable.image9, R.drawable.image10, R.drawable.image11 };
+			R.drawable.image6, R.drawable.image7, R.drawable.image8, R.drawable.image9, R.drawable.image10, R.drawable.image11 }; //array containing crystal images
 
 	 public GalleryImageAdapter(Context context) 
 	    {
@@ -20,7 +29,7 @@ public class GalleryImageAdapter extends BaseAdapter {
 	    }
 
 	    public int getCount() {
-	        return mImageIds.length;
+	        return ImageIds.length;
 	    }
 
 	    public Object getItem(int position) {
@@ -32,13 +41,13 @@ public class GalleryImageAdapter extends BaseAdapter {
 	    }
 
 
-	    // Override this method according to your need
+	    
 	    public View getView(int index, View view, ViewGroup viewGroup) 
 	    {
-	        // TODO Auto-generated method stub
+	     
 	        ImageView i = new ImageView(mContext);
 
-	        i.setImageResource(mImageIds[index]);
+	        i.setImageResource(ImageIds[index]);
 	        i.setLayoutParams(new Gallery.LayoutParams(200, 200));
 	    
 	        i.setScaleType(ImageView.ScaleType.FIT_XY);

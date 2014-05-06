@@ -27,11 +27,28 @@ import android.widget.Toast;
 
 public class CrystalImages extends Menu {
 
-	private Integer[] mImageIds = { R.drawable.image1, R.drawable.image2,
+	private Integer[] ImageIds = { R.drawable.image1, R.drawable.image2,
 			R.drawable.image3, R.drawable.image4, R.drawable.image5,
 			R.drawable.image6, R.drawable.image7, R.drawable.image8,
-			R.drawable.image9, R.drawable.image10, R.drawable.image11 };
-
+			R.drawable.image9, R.drawable.image10, R.drawable.image11 }; // array
+																			// to
+																			// hold
+																			// all
+																			// the
+																			// crystal
+																			// images
+																			// so
+																			// that
+																			// we
+																			// can
+																			// use
+																			// them
+																			// in
+																			// a
+																			// gallery
+																			// type
+																			// way.
+	/* Standard initialisation of what we need to use within the activity */
 	Bitmap bi;
 	InputStream is;
 	ImageView iv1;
@@ -44,13 +61,24 @@ public class CrystalImages extends Menu {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.crystal_images);
-		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		initalise_crystal_buttons();
 
 		Toast.makeText(getApplicationContext(),
-				"Select an image to get started!", Toast.LENGTH_SHORT).show();
-
+				"Select an image to get started!", Toast.LENGTH_SHORT).show(); // pop-up
+																				// to
+																				// subtly
+																				// instruct
+																				// the
+																				// user
+																				// what
+																				// to
+																				// do
+		/*
+		 * Disable buttons when activity is first start so that the use can not
+		 * apply effects to an empty imageview
+		 */
 		dark_filter1.setEnabled(false);
 		bright_filter1.setEnabled(false);
 		save_img1.setEnabled(false);
@@ -66,16 +94,19 @@ public class CrystalImages extends Menu {
 		// InputStream is = getResources().openRawResource(R.drawable.image1);
 		// bi = BitmapFactory.decodeStream(is);
 
+		/* initialise the gallery so we are able to use it */
 		final Gallery gallery = (Gallery) findViewById(R.id.gallery1);
 		iv1 = (ImageView) findViewById(R.id.crystal_img_imgV);
 		gallery.setSpacing(1);
 		gallery.setAdapter(new GalleryImageAdapter(this));
 
+		/* Respond to user activity accordingly */
 		gallery.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
+					int index, long id) {
 				// show the selected Image
-				iv1.setImageResource(mImageIds[position]);
+				iv1.setImageResource(ImageIds[index]); // set imageview based on which image from the array was chosen
+				/* Enabled buttons after user has selected an image so that they are able to apply effects to it */
 				dark_filter1.setEnabled(true);
 				bright_filter1.setEnabled(true);
 				save_img1.setEnabled(true);
@@ -86,7 +117,7 @@ public class CrystalImages extends Menu {
 
 			}
 		});
-
+		/* Standard initialisation of onClickListener for applying effects */
 		dark_filter1.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -95,7 +126,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable4 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap3 = drawable4.getBitmap();
-				Bitmap ok4 = doBrightness(bitmap3, -60);
+				Bitmap ok4 = ImageEffects.doBrightness(bitmap3, -60);
 				iv1.setImageBitmap(ok4);
 				undo1.setEnabled(true);
 
@@ -111,7 +142,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable5 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap4 = drawable5.getBitmap();
-				Bitmap ok5 = doBrightness(bitmap4, 50);
+				Bitmap ok5 = ImageEffects.doBrightness(bitmap4, 50);
 				iv1.setImageBitmap(ok5);
 				undo1.setEnabled(true);
 
@@ -127,7 +158,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable6 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap5 = drawable6.getBitmap();
-				Bitmap ok6 = doInvert(bitmap5);
+				Bitmap ok6 = ImageEffects.doInvert(bitmap5);
 				iv1.setImageBitmap(ok6);
 				undo1.setEnabled(true);
 
@@ -143,7 +174,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable7 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap6 = drawable7.getBitmap();
-				Bitmap ok7 = doGreyscale(bitmap6);
+				Bitmap ok7 = ImageEffects.doGreyscale(bitmap6);
 				iv1.setImageBitmap(ok7);
 				undo1.setEnabled(true);
 
@@ -159,7 +190,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable8 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap7 = drawable8.getBitmap();
-				Bitmap ok8 = applyReflection(bitmap7);
+				Bitmap ok8 = ImageEffects.applyReflection(bitmap7);
 				iv1.setImageBitmap(ok8);
 				reflection2.setEnabled(false);
 				undo1.setEnabled(true);
@@ -207,7 +238,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable9 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap8 = drawable9.getBitmap();
-				Bitmap ok9 = roundCorner(bitmap8, 45);
+				Bitmap ok9 = ImageEffects.roundCorner(bitmap8, 45);
 				iv1.setImageBitmap(ok9);
 				round_corner.setEnabled(false);
 				undo1.setEnabled(true);
@@ -224,7 +255,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable9 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap8 = drawable9.getBitmap();
-				Bitmap ok9 = applyShadingFilter(bitmap8, -17000);
+				Bitmap ok9 = ImageEffects.applyShadingFilter(bitmap8, -17000);
 				iv1.setImageBitmap(ok9);
 				round_corner.setEnabled(false);
 				undo1.setEnabled(true);
@@ -241,7 +272,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable9 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap8 = drawable9.getBitmap();
-				Bitmap ok9 = getTintImage(bitmap8, -17000);
+				Bitmap ok9 = ImageEffects.getTintImage(bitmap8, -17000);
 				iv1.setImageBitmap(ok9);
 				round_corner.setEnabled(false);
 				undo1.setEnabled(true);
@@ -302,8 +333,6 @@ public class CrystalImages extends Menu {
 			Toast.makeText(getApplicationContext(), "SD card is not available",
 					Toast.LENGTH_SHORT).show();
 		}
-
-		
 
 	}
 
