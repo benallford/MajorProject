@@ -204,7 +204,7 @@ public class Menu extends Activity {
 				buttonSound.start();
 				BitmapDrawable drawable3 = (BitmapDrawable) iv.getDrawable(); //bitmap drawable so we can draw on to a canvas
 				Bitmap bitmap3 = drawable3.getBitmap(); //convert bitmapdrawable to bitmap
-				Bitmap ok3 = ImageEffects.doBrightness(bitmap3, -60); //apply image effect to a new bitmap object while passing in bitmap from imageview
+				Bitmap ok3 = ImageEffects.increaseAndDecreaseBrightness(bitmap3, -60); //apply image effect to a new bitmap object while passing in bitmap from imageview
 				iv.setImageBitmap(ok3); //set image view to bitmap object
 				undo.setEnabled(true); //enable undo button so the user can undo any effects etc
 
@@ -226,7 +226,7 @@ public class Menu extends Activity {
 				buttonSound.start();
 				BitmapDrawable drawable3 = (BitmapDrawable) iv.getDrawable();
 				Bitmap bitmap3 = drawable3.getBitmap();
-				Bitmap ok3 = ImageEffects.doBrightness(bitmap3, 50);
+				Bitmap ok3 = ImageEffects.increaseAndDecreaseBrightness(bitmap3, 50);
 				iv.setImageBitmap(ok3);
 				undo.setEnabled(true);
 
@@ -272,7 +272,7 @@ public class Menu extends Activity {
 				buttonSound.start();
 				BitmapDrawable drawable = (BitmapDrawable) iv.getDrawable();
 				Bitmap bitmap = drawable.getBitmap();
-				Bitmap ok = ImageEffects.doInvert(bitmap);
+				Bitmap ok = ImageEffects.invertImageColours(bitmap);
 				iv.setImageBitmap(ok);
 				undo.setEnabled(true);
 
@@ -288,7 +288,7 @@ public class Menu extends Activity {
 				buttonSound.start();
 				BitmapDrawable drawable1 = (BitmapDrawable) iv.getDrawable();
 				Bitmap bitmap1 = drawable1.getBitmap();
-				Bitmap ok1 = ImageEffects.doGreyscale(bitmap1);
+				Bitmap ok1 = ImageEffects.blackAndWhite(bitmap1);
 				iv.setImageBitmap(ok1);
 				undo.setEnabled(true);
 
@@ -333,7 +333,7 @@ public class Menu extends Activity {
 				buttonSound.start();
 				BitmapDrawable drawable2 = (BitmapDrawable) iv.getDrawable();
 				Bitmap bitmap2 = drawable2.getBitmap();
-				Bitmap ok2 = ImageEffects.roundCorner(bitmap2, 45);
+				Bitmap ok2 = ImageEffects.roundCornerOfImage(bitmap2, 45);
 				iv.setImageBitmap(ok2);
 				undo.setEnabled(true);
 
@@ -366,7 +366,7 @@ public class Menu extends Activity {
 				BitmapDrawable drawable2 = (BitmapDrawable) iv.getDrawable();
 				Bitmap bitmap2 = drawable2.getBitmap();
 
-				Bitmap ok2 = ImageEffects.applyShadingFilter(bitmap2, -7500);
+				Bitmap ok2 = ImageEffects.shadeImage(bitmap2, -7500);
 				iv.setImageBitmap(ok2);
 
 				undo.setEnabled(true);

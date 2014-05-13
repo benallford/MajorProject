@@ -85,7 +85,7 @@ public class LoadImageFromSDCard extends Activity implements OnClickListener {
 						.getDrawable();
 				Bitmap bitmap2 = drawable2.getBitmap();
 
-				Bitmap ok2 = ImageEffects.roundCorner(bitmap2, 45);
+				Bitmap ok2 = ImageEffects.roundCornerOfImage(bitmap2, 45);
 				ImageView.setImageBitmap(ok2);
 				roundCorner.setEnabled(false); // once effect has been applied
 												// don't let user apply it again

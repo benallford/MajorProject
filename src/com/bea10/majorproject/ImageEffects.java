@@ -19,6 +19,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+/*
+ * This class holds all the methods for apply effects to the image whether it be user taken images, crystal images or images from the image library
+ */
+
 public class ImageEffects {
 	
 	public static final double PI = 3.14159d;
@@ -35,39 +39,46 @@ public class ImageEffects {
 //	static final int ZOOM = 2;
 //	int mode = NONE;
 	
-	
-	public static Bitmap doInvert(Bitmap src) {
+	/*
+	 * This method inverts the pixel colours of a bitmap image, it takes in the bitmap that the user wants changed
+	 */
+	public static Bitmap invertImageColours(Bitmap src) {
 		// create new bitmap with the same settings as source bitmap
-		Bitmap bmOut = Bitmap.createBitmap(src.getWidth(), src.getHeight(),
+		Bitmap new_bitmap = Bitmap.createBitmap(src.getWidth(), src.getHeight(),
 				src.getConfig());
 		// color info
-		int A, R, G, B;
-		int pixelColor;
-		// image size
+		int Alpha, Blue, Green, Red;
+		int image_pixelColor;
+		// get the image size
 		int height = src.getHeight();
 		int width = src.getWidth();
 
-		// scan through every pixel
+		// scan through pixels
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				// get one pixel
-				pixelColor = src.getPixel(x, y);
+				// get image pixels and store in an integer
+				image_pixelColor = src.getPixel(x, y);
 				// saving alpha channel
-				A = Color.alpha(pixelColor);
+				Alpha = Color.alpha(image_pixelColor);
 				// inverting byte for each R/G/B channel
-				R = 255 - Color.red(pixelColor);
-				G = 255 - Color.green(pixelColor);
-				B = 255 - Color.blue(pixelColor);
-				// set newly-inverted pixel to output image
-				bmOut.setPixel(x, y, Color.argb(A, R, G, B));
+				Red = 255 - Color.red(image_pixelColor);
+				Blue = 255 - Color.blue(image_pixelColor);
+				Green = 255 - Color.green(image_pixelColor);
+				
+				
+				// set new bitmap to new modified colours
+				new_bitmap.setPixel(x, y, Color.argb(Alpha, Red, Green, Blue));
 			}
 		}
 
-		// return final bitmap
-		return bmOut;
+		// return final bitmap with changes applied
+		return new_bitmap;
 	}
 
-	public static Bitmap doGreyscale(Bitmap src) {
+	/*
+	 * This method changes the pixels in an image to black and white, it takes in a bitmap the user wants to change
+	 */
+	public static Bitmap blackAndWhite(Bitmap src) {
 		// constant factors
 		final double GS_RED = 0.299;
 		final double GS_GREEN = 0.587;
@@ -105,57 +116,67 @@ public class ImageEffects {
 		return bmOut;
 	}
 
-	public static Bitmap doBrightness(Bitmap src, int value) {
+	/*
+	 * This method increases and decreases the brightness of the image, it takes in a bitmap to be modified and an integer value representing
+	 * how much each colour channel should be changed by
+	 */
+	
+	public static Bitmap increaseAndDecreaseBrightness(Bitmap src, int colourValue) {
 		// image size
-		int width = src.getWidth();
 		int height = src.getHeight();
+		int width = src.getWidth();
 		// create output bitmap
-		Bitmap bmOut = Bitmap.createBitmap(width, height, src.getConfig());
-		// color information
-		int A, R, G, B;
+		Bitmap new_bitmap = Bitmap.createBitmap(width, height, src.getConfig());
+		// colour information
+		int Alpha, Red, Green, Blue;
 		int pixel;
 
 		// scan through all pixels
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
-				// get pixel color
+				// get pixel colour
 				pixel = src.getPixel(x, y);
-				A = Color.alpha(pixel);
-				R = Color.red(pixel);
-				G = Color.green(pixel);
-				B = Color.blue(pixel);
+				Alpha = Color.alpha(pixel);
+				Red = Color.red(pixel);
+				Green = Color.green(pixel);
+				Blue = Color.blue(pixel);
 
-				// increase/decrease each channel
-				R += value;
-				if (R > 255) {
-					R = 255;
-				} else if (R < 0) {
-					R = 0;
+				// increase/decrease each channel by chaning value based on int passed in 
+				Red += colourValue;
+				if (Red > 255) {
+					Red = 255;
+				} else if (Red < 0) {
+					Red = 0;
+				}
+				//same for this 
+				Green += colourValue;
+				if (Green > 255) {
+					Green = 255;
+				} else if (Green < 0) {
+					Green = 0;
+				}
+				//and this
+				Blue += colourValue;
+				if (Blue > 255) {
+					Blue = 255;
+				} else if (Blue < 0) {
+					Blue = 0;
 				}
 
-				G += value;
-				if (G > 255) {
-					G = 255;
-				} else if (G < 0) {
-					G = 0;
-				}
-
-				B += value;
-				if (B > 255) {
-					B = 255;
-				} else if (B < 0) {
-					B = 0;
-				}
-
-				// apply new pixel color to output bitmap
-				bmOut.setPixel(x, y, Color.argb(A, R, G, B));
+				// apply new pixel colour to output bitmap
+				new_bitmap.setPixel(x, y, Color.argb(Alpha, Red, Green, Blue));
 			}
 		}
 
-		// return final image
-		return bmOut;
+		// return new bitmap with changed colour values
+		return new_bitmap;
 	}
 
+	/*
+	 * This method applies a reflection effect to an image and takes in the bitmap which wishes to be changed
+	 * 
+	 */
+	
 	public static Bitmap applyReflection(Bitmap originalImage) {
 		// gap space between original and reflected
 		final int reflectionGap = 4;
@@ -203,7 +224,12 @@ public class ImageEffects {
 		return bitmapWithReflection;
 	}
 
-	public static Bitmap roundCorner(Bitmap src, float round) {
+	/*
+	 * This method removes the corners from an image and takes for its parameters the source of a bitmap and a float representing
+	 * the degree of the curve when rounding the images off
+	 */
+	
+	public static Bitmap roundCornerOfImage(Bitmap src, float round) {
 		// image size
 		int width = src.getWidth();
 		int height = src.getHeight();
@@ -233,32 +259,40 @@ public class ImageEffects {
 		// return final image
 		return result;
 	}
-
-	public static Bitmap applyShadingFilter(Bitmap source, int shadingColor) {
+	
+	/*
+	 * This method applies a shading effect to an image, it takes in the bitmap which you wish to change and the colour of the shade
+	 * to be applied to the pixels within the image
+	 */
+	public static Bitmap shadeImage(Bitmap source, int shadeColour) {
 		// get image size
 		int width = source.getWidth();
 		int height = source.getHeight();
-		int[] pixels = new int[width * height];
+		int[] imagePixels = new int[width * height];
 		// get pixel array from source
-		source.getPixels(pixels, 0, width, 0, 0, width, height);
+		source.getPixels(imagePixels, 0, width, 0, 0, width, height);
 
 		int index = 0;
-		// iteration through pixels
+		// get the pixels in the image
 		for (int y = 0; y < height; ++y) {
 			for (int x = 0; x < width; ++x) {
-				// get current index in 2D-matrix
+				// get current index in matrix
 				index = y * width + x;
-				// AND
-				pixels[index] &= shadingColor;
+				//change the pixels at each index to specific colour passed in to method
+				imagePixels[index] &= shadeColour;
 			}
 		}
-		// output bitmap
+		// create new bitmap with the new colours
 		Bitmap bmOut = Bitmap.createBitmap(width, height,
-				Bitmap.Config.ARGB_8888);
-		bmOut.setPixels(pixels, 0, width, 0, 0, width, height);
-		return bmOut;
+				Bitmap.Config.ARGB_8888); //each pixel is stored on 4 bytes ensures better quality image
+		bmOut.setPixels(imagePixels, 0, width, 0, 0, width, height);
+		return bmOut; //return new bitmap with changed colours
 	}
 
+	/*
+	 * This method applies a tint effect to an image by emphasising certain colours, it takes in the source of a bitmap and the degree to represent
+	 * how much to tint the image by.
+	 */
 	public static Bitmap getTintImage(Bitmap src, int degree) {
 
 		int width = src.getWidth();
@@ -303,6 +337,13 @@ public class ImageEffects {
 		return outBitmap;
 	}
 
+	/*
+	 * 
+	 * This method was going to be used for creating the silhouette effect by replacing the colours of an image so it could achieve
+	 * the silhouette like effect.
+	 * 
+	 */
+	
 	public Bitmap replaceColor(Bitmap src,int fromColor, int targetColor) {
         if(src == null) {
             return null;
@@ -325,7 +366,12 @@ public class ImageEffects {
         return result;
 	}
 	
-
+/*
+ * 
+ * This method would have been for zooming in on the image view but this functionality was removed in an earlier version
+ * 
+ */
+	
 //	public void zoom(){
 //	Menu.iv.setOnTouchListener(new View.OnTouchListener() {
 //		@Override

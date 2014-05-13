@@ -126,7 +126,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable4 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap3 = drawable4.getBitmap();
-				Bitmap ok4 = ImageEffects.doBrightness(bitmap3, -60);
+				Bitmap ok4 = ImageEffects.increaseAndDecreaseBrightness(bitmap3, -60);
 				iv1.setImageBitmap(ok4);
 				undo1.setEnabled(true);
 
@@ -142,7 +142,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable5 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap4 = drawable5.getBitmap();
-				Bitmap ok5 = ImageEffects.doBrightness(bitmap4, 50);
+				Bitmap ok5 = ImageEffects.increaseAndDecreaseBrightness(bitmap4, 50);
 				iv1.setImageBitmap(ok5);
 				undo1.setEnabled(true);
 
@@ -158,7 +158,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable6 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap5 = drawable6.getBitmap();
-				Bitmap ok6 = ImageEffects.doInvert(bitmap5);
+				Bitmap ok6 = ImageEffects.invertImageColours(bitmap5);
 				iv1.setImageBitmap(ok6);
 				undo1.setEnabled(true);
 
@@ -174,7 +174,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable7 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap6 = drawable7.getBitmap();
-				Bitmap ok7 = ImageEffects.doGreyscale(bitmap6);
+				Bitmap ok7 = ImageEffects.blackAndWhite(bitmap6);
 				iv1.setImageBitmap(ok7);
 				undo1.setEnabled(true);
 
@@ -238,7 +238,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable9 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap8 = drawable9.getBitmap();
-				Bitmap ok9 = ImageEffects.roundCorner(bitmap8, 45);
+				Bitmap ok9 = ImageEffects.roundCornerOfImage(bitmap8, 45);
 				iv1.setImageBitmap(ok9);
 				round_corner.setEnabled(false);
 				undo1.setEnabled(true);
@@ -255,7 +255,7 @@ public class CrystalImages extends Menu {
 				buttonSound.start();
 				BitmapDrawable drawable9 = (BitmapDrawable) iv1.getDrawable();
 				Bitmap bitmap8 = drawable9.getBitmap();
-				Bitmap ok9 = ImageEffects.applyShadingFilter(bitmap8, -17000);
+				Bitmap ok9 = ImageEffects.shadeImage(bitmap8, -17000);
 				iv1.setImageBitmap(ok9);
 				round_corner.setEnabled(false);
 				undo1.setEnabled(true);
